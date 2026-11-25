@@ -73,3 +73,7 @@ The frontend provides:
 This is an educational local prototype, not a production authentication or intrusion-detection system. Rate limiting and temporary blocks are held in memory and reset when the process restarts. The risk weights and thresholds are illustrative, not empirically validated. Simulation events are synthetic and are not evidence of real attack detection.
 
 Do not expose this application publicly or use it to protect real accounts without a security review, persistent rate limiting, validated risk logic, and additional production controls.
+
+## Source attribution
+
+The initial Flask authentication prototype and its dependency list were brought over from [ITCS_PassGuard-Lab](https://github.com/MehakD-08/ITCS_PassGuard-Lab). The adaptive-risk dashboard and the /presentation route were added for this repository.
