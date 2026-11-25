@@ -232,8 +232,23 @@ def simulator():
 
 @app.route('/presentation')
 def presentation():
-    """Serve the standalone adaptive-risk presentation UI."""
-    return send_from_directory(os.path.join(app.root_path, 'frontend'), 'index.html')
+    """Serve the production build of the React presentation UI."""
+    dist_dir = os.path.join(app.root_path, 'frontend', 'dist')
+    index_path = os.path.join(dist_dir, 'index.html')
+    if not os.path.isfile(index_path):
+        return (
+            'React frontend is not built yet. Run "npm install" and "npm run build" '
+            'inside the frontend directory.',
+            503,
+        )
+    return send_from_directory(dist_dir, 'index.html')
+
+
+@app.route('/assets/<path:filename>')
+def presentation_assets(filename):
+    """Serve Vite-generated assets when Flask is used locally."""
+    assets_dir = os.path.join(app.root_path, 'frontend', 'dist', 'assets')
+    return send_from_directory(assets_dir, filename)
 
 if __name__ == '__main__':
     with app.app_context():
