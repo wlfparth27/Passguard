@@ -158,9 +158,16 @@ export default function FeatureSuite({
   }
 
   function deleteProfile() {
-    localStorage.removeItem('passguard-baseline');
+    const clearedBaseline = {
+      ...STARTER_BASELINE,
+      verifiedSessions: 0,
+      knownDevices: 0,
+      knownLocations: 0,
+      usualTimeWindows: 0,
+    };
+    localStorage.setItem('passguard-baseline', JSON.stringify(clearedBaseline));
     onClearProfile();
-    setBaseline({ ...STARTER_BASELINE, verifiedSessions: 0, knownDevices: 0, knownLocations: 0, usualTimeWindows: 0 });
+    setBaseline(clearedBaseline);
     setFeedbackMessage('Saved profile and baseline settings cleared from this browser.');
   }
 
