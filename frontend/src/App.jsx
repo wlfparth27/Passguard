@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import FeatureSuite from './FeatureSuite.jsx';
 
 const DEFAULT_PROFILE = { deviceSensitivity: 70, locationSensitivity: 60, timeSensitivity: 45, failedAttemptTolerance: 2 };
 const DEFAULT_CONTEXT = { recognisedDevice: true, familiarLocation: true, unusualTime: false, failedAttempts: 0 };
@@ -252,6 +253,23 @@ export default function App() {
             </section>
           </div>
         </div>
+        <FeatureSuite
+          profile={profile}
+          context={context}
+          score={score}
+          decision={decision}
+          factors={factors}
+          scoreForContext={(nextContext, nextProfile = profile) => assessRisk(nextProfile, nextContext).score}
+          onConfirmContext={(nextContext) => setContext(nextContext)}
+          onImportProfile={(nextProfile) => {
+            setProfile(nextProfile);
+            localStorage.setItem('passguard-profile', JSON.stringify(nextProfile));
+          }}
+          onClearProfile={() => {
+            setProfile({ ...DEFAULT_PROFILE });
+            localStorage.removeItem('passguard-profile');
+          }}
+        />
         <footer className="page-footnote">Educational prototype · Transparent illustrative scoring · Synthetic events only</footer>
       </main>
       {toast && <div className="toast" role="status">{toast}</div>}

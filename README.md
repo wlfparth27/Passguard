@@ -79,3 +79,14 @@ To serve the compiled React build through Flask locally, run `npm run build` ins
 ## Limitations
 
 This is an educational prototype, not a production authentication or intrusion-detection system. The React dashboard currently demonstrates its own illustrative scoring model; it does not call the Flask authentication engine or enforce access decisions. Backend rate limits and temporary blocks are held in memory and reset when the process restarts. Risk weights and thresholds are not empirically validated. Synthetic events are not evidence of real attack detection.
+
+
+## Distinctive user-facing features
+
+- **User-taught baseline:** explicitly confirmed sign-ins add device, region and time context to the browser-local profile.
+- **Counterfactual explanations:** the dashboard estimates which context change would reduce the score most.
+- **Personalisation impact:** compares a user's configured profile against a neutral reference profile.
+- **Portable profile and decision receipt:** users can export/import profile settings and export a JSON explanation of a risk decision.
+- **Local-first controls:** users can remove their locally stored profile data.
+
+These are demonstration features. The baseline feedback is not proof of identity, the risk calculation is not validated, and exported JSON is not a signed audit record.
