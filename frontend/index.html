@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PassGuard — Adaptive Risk Lab</title>
+<style>
+:root{--bg:#f4f6f6;--card:#fff;--ink:#18252c;--muted:#7b898f;--line:#e4e9e9;--teal:#167e72;--soft:#e5f3ef;--amber:#a66c20;--red:#b54d4d;--nav:#172932}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}aside{background:var(--nav);color:#dce7e9;padding:25px 17px;display:flex;flex-direction:column;gap:35px}
+.brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;padding:0 8px}.mark{width:28px;height:28px;border:1px solid #75c6b8;color:#75c6b8;border-radius:8px;display:grid;place-items:center}
+.navtitle{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#78909b;padding:0 10px;margin-bottom:10px}.nav{padding:10px;border-radius:8px;color:#a8bbc4;margin:4px 0;font-size:12px}.nav.active{background:#29424b;color:white}.sidefoot{margin-top:auto;border-top:1px solid #30434b;padding:14px 9px;color:#8197a1;font-size:10px}
+main{padding:28px clamp(18px,4vw,48px);min-width:0}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px;color:var(--muted);font-size:11px}.user{display:flex;align-items:center;gap:8px}.avatar{width:29px;height:29px;border-radius:50%;background:#dcece7;color:#27685f;display:grid;place-items:center;font-weight:700}
+.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}.eyebrow{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:7px}h1{font-size:30px;line-height:1.1;letter-spacing:-1px;margin:0;font-weight:650}h2{font-size:14px;margin:0;font-weight:650}.sub{color:var(--muted);font-size:12px;margin:9px 0 0}.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:10px 13px;font-size:11px;font-weight:650;color:var(--ink);cursor:pointer}.btn.primary{background:var(--teal);border-color:var(--teal);color:white}.btn:hover{filter:brightness(.97)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}.metric,.panel{background:var(--card);border:1px solid var(--line);border-radius:11px}.metric{padding:16px}.label{font-size:10px;color:var(--muted)}.value{font-size:26px;font-weight:700;letter-spacing:-1px;margin:8px 0 2px}.note{font-size:10px;color:#8d999e}.note b{color:var(--teal)}
+.columns{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr);gap:16px;align-items:start}.panel{padding:19px;margin-bottom:16px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}.tag{font-size:10px;padding:5px 9px;border-radius:20px;background:var(--soft);color:var(--teal);font-weight:700}.tag.mid{background:#fff2df;color:var(--amber)}.tag.high{background:#fff0ef;color:var(--red)}
+.scorearea{display:grid;grid-template-columns:130px 1fr;gap:20px;align-items:center}.gauge{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--teal) calc(var(--score)*1%),#edf1f1 0);position:relative}.gauge:before{content:"";position:absolute;inset:9px;background:white;border-radius:50%}.ginner{position:relative;text-align:center}.scorenum{font-size:32px;line-height:1;font-weight:750;letter-spacing:-1px}.scorecap{font-size:9px;color:var(--muted);margin-top:5px}.decision{font-size:18px;font-weight:650;margin-bottom:5px}.desc{font-size:11px;color:var(--muted);margin:0 0 12px}.track{height:5px;background:#edf1f1;border-radius:10px;overflow:hidden}.track span{display:block;height:100%;background:var(--teal);width:var(--score);transition:width .2s}.tracklabels{display:flex;justify-content:space-between;font-size:9px;color:#96a1a5;margin-top:5px}
+hr{border:0;border-top:1px solid var(--line);margin:19px 0}.factorlist{display:grid;gap:12px}.factor{display:flex;justify-content:space-between;gap:12px}.fname{font-size:11px;font-weight:650}.fdesc{font-size:10px;color:var(--muted);margin-top:2px}.points{font-size:11px;font-weight:700}.points.negative{color:var(--teal)}
+.controls{display:grid;gap:13px}.control{display:grid;gap:7px}.controltop{display:flex;justify-content:space-between;font-size:11px}.controltop label{font-weight:650}.controltop output{color:var(--teal);font-weight:700}.range{width:100%;accent-color:var(--teal)}.toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0}.togglelabel{font-size:11px;font-weight:650}.togglehint{font-size:9px;color:var(--muted)}input[type=checkbox]{accent-color:var(--teal);width:16px;height:16px}.actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1}.insight{font-size:10px;color:#53666a;background:#f5faf8;border:1px solid #e3efec;border-radius:8px;padding:12px;margin-top:15px}.insight strong{color:var(--teal)}
+table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;font-size:9px;color:#8d999e;padding:9px 7px;border-bottom:1px solid var(--line)}td{font-size:10px;padding:11px 7px;border-bottom:1px solid #f0f3f3}tr:last-child td{border-bottom:0}.event{font-weight:650}.context{font-size:9px;color:var(--muted);margin-top:2px}.pill{font-weight:700;border-radius:5px;padding:4px 7px;background:var(--soft);color:var(--teal)}.pill.mid{background:#fff2df;color:var(--amber)}.pill.high{background:#fff0ef;color:var(--red)}
+.chart{display:flex;align-items:end;gap:8px;height:90px;padding-top:10px}.bar{flex:1;height:100%;display:flex;align-items:end}.bar span{width:100%;max-width:25px;min-height:4px;background:#b9dcd5;border-radius:4px 4px 0 0}.bar:nth-child(4n) span{background:var(--teal)}.chartlabels{display:flex;justify-content:space-between;font-size:9px;color:#98a3a7;margin-top:7px}.foot{font-size:9px;color:#929da1;text-align:center;margin:10px 0}.toast{position:fixed;right:20px;bottom:20px;background:#182c33;color:white;padding:11px 15px;border-radius:8px;font-size:11px;opacity:0;transform:translateY(6px);transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.columns{grid-template-columns:1fr}.right{display:grid;grid-template-columns:1fr 1fr;gap:16px}.right .panel{margin-bottom:0}}
+@media(max-width:700px){.app{grid-template-columns:1fr}aside{padding:13px 16px;flex-direction:row;align-items:center;justify-content:space-between;gap:0}aside .navtitle,aside .nav,aside .sidefoot{display:none}main{padding:20px 14px}.heading{align-items:flex-start;flex-direction:column}h1{font-size:26px}.right{display:block}.right .panel{margin-bottom:16px}}
+@media(max-width:430px){.metric{padding:12px}.value{font-size:23px}.scorearea{grid-template-columns:1fr;justify-items:center;text-align:center}.scorecopy{width:100%}.actions{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+ <div class="brand"><div class="mark">P</div>PassGuard <span style="color:#8199a3;font-weight:500">/ LAB</span></div>
+ <div><div class="navtitle">Workspace</div><div class="nav active">▦ &nbsp; Overview</div><div class="nav">◎ &nbsp; Risk profile</div><div class="nav">⌁ &nbsp; Activity</div></div>
+ <div class="sidefoot">ADAPTIVE AUTHENTICATION<br>Local presentation prototype</div>
+</aside>
+<main>
+ <div class="top"><span>PassGuard / Overview</span><span class="user"><span class="avatar">D</span> Demo profile</span></div>
+ <div class="heading"><div><div class="eyebrow">Security overview</div><h1>Adaptive access, at a glance.</h1><p class="sub">Evaluate each sign-in against the user's normal behaviour.</p></div><button class="btn" id="reset">Reset demo</button></div>
+ <section class="metrics">
+  <div class="metric"><div class="label">Current risk</div><div class="value" id="metricRisk">18 <span style="font-size:11px;color:#98a3a7">/ 100</span></div><div class="note"><b id="level">Low risk</b> · live evaluation</div></div>
+  <div class="metric"><div class="label">Profile confidence</div><div class="value" id="confidence">76<span style="font-size:11px;color:#98a3a7">%</span></div><div class="note">Illustrative baseline</div></div>
+  <div class="metric"><div class="label">Events evaluated</div><div class="value" id="eventcount">24</div><div class="note">Synthetic activity</div></div>
+  <div class="metric"><div class="label">Step-up challenges</div><div class="value" id="challengecount">3</div><div class="note">Risk-triggered</div></div>
+ </section>
+ <div class="columns">
+  <div>
+   <section class="panel">
+    <div class="panelhead"><h2>Live risk evaluation</h2><span class="tag" id="badge">LOW RISK</span></div>
+    <div class="scorearea"><div class="gauge" id="gauge" style="--score:18"><div class="ginner"><div class="scorenum" id="score">18</div><div class="scorecap">RISK SCORE</div></div></div>
+     <div class="scorecopy"><div class="decision" id="decision">Access allowed</div><p class="desc" id="description">This sign-in is consistent with the user's profile.</p><div class="track"><span id="fill" style="width:18%"></span></div><div class="tracklabels"><span>Trusted</span><span>High risk</span></div></div>
+    </div>
+    <hr><div class="panelhead"><h2>Score explanation</h2><span class="label">Personalised signals</span></div><div class="factorlist" id="factors"></div>
+    <div class="insight" id="insight"><strong>Profile insight:</strong> Familiar context lowers risk for this user.</div>
+   </section>
+   <section class="panel">
+    <div class="panelhead"><h2>Recent activity</h2><button class="btn" id="simulate">＋ Simulate sign-in</button></div>
+    <div style="overflow:auto"><table><thead><tr><th>EVENT</th><th>CONTEXT</th><th>RISK</th><th>DECISION</th></tr></thead><tbody id="events"></tbody></table></div>
+   </section>
+  </div>
+  <div class="right">
+   <section class="panel">
+    <div class="panelhead"><h2>Personal risk profile</h2><span class="label">Adjust sensitivity</span></div>
+    <div class="controls">
+     <div class="control"><div class="controltop"><label for="device">Device sensitivity</label><output id="deviceout">70%</output></div><input class="range" id="device" type="range" min="0" max="100" value="70"></div>
+     <div class="control"><div class="controltop"><label for="location">Location sensitivity</label><output id="locationout">60%</output></div><input class="range" id="location" type="range" min="0" max="100" value="60"></div>
+     <div class="control"><div class="controltop"><label for="time">Time sensitivity</label><output id="timeout">45%</output></div><input class="range" id="time" type="range" min="0" max="100" value="45"></div>
+     <div class="control"><div class="controltop"><label for="tolerance">Usual failure tolerance</label><output id="toleranceout">2 attempts</output></div><input class="range" id="tolerance" type="range" min="0" max="6" value="2"></div>
+    </div>
+    <hr><div class="panelhead"><h2>Sign-in context</h2><span class="label">Test input</span></div>
+    <div class="toggle"><div><div class="togglelabel">Recognised device</div><div class="togglehint">Seen in this profile before</div></div><input type="checkbox" id="trusted" checked></div>
+    <div class="toggle"><div><div class="togglelabel">Familiar location</div><div class="togglehint">Matches usual region</div></div><input type="checkbox" id="known" checked></div>
+    <div class="toggle"><div><div class="togglelabel">Unusual sign-in time</div><div class="togglehint">Outside normal activity hours</div></div><input type="checkbox" id="odd"></div>
+    <div class="control" style="margin-top:10px"><div class="controltop"><label for="failures">Recent failed attempts</label><output id="failureout">0</output></div><input class="range" id="failures" type="range" min="0" max="10" value="0"></div>
+    <div class="actions"><button class="btn" id="save">Save profile</button><button class="btn primary" id="evaluate">Evaluate</button></div>
+    <p class="note" style="line-height:1.6;margin-top:12px">Values are stored in this browser for the demo. This page does not authenticate users or contact a backend.</p>
+   </section>
+   <section class="panel"><div class="panelhead"><h2>Risk trend</h2><span class="label">Recent demo events</span></div><div class="chart" id="chart"></div><div class="chartlabels"><span>Earlier</span><span>Latest</span></div></section>
+  </div>
+ </div>
+ <p class="foot">Educational prototype · Transparent illustrative scoring · Synthetic events only</p>
+</main>
+</div><div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id),base={device:70,location:60,time:45,tolerance:2};
+let profile={...base},challenge=3,events=[
+ {name:"Successful sign-in",context:"Recognised device · Home",risk:12,decision:"Allowed"},
+ {name:"Sign-in challenge",context:"New browser · Home",risk:38,decision:"Step-up"},
+ {name:"Successful sign-in",context:"Recognised device · Home",risk:9,decision:"Allowed"},
+ {name:"Failed password",context:"Unknown device · New region",risk:72,decision:"Challenge"}
+];
+const clamp=n=>Math.max(0,Math.min(100,n));
+function inputs(){return{device:$("trusted").checked,location:$("known").checked,time:$("odd").checked,fail:+$("failures").value}}
+function scoreModel(){
+ const c=inputs(),p=profile;
+ const factors=[
+  {name:"Device familiarity",desc:c.device?"Recognised device reduces risk":"New device versus profile",points:c.device?-Math.round(7*p.device/100):Math.round(28*p.device/100)},
+  {name:"Location deviation",desc:c.location?"Familiar region":"Unfamiliar sign-in region",points:c.location?-Math.round(4*p.location/100):Math.round(26*p.location/100)},
+  {name:"Time anomaly",desc:c.time?"Outside usual activity window":"Within expected activity hours",points:c.time?Math.round(18*p.time/100):0},
+  {name:"Failed attempts",desc:c.fail+" recent failure(s) · tolerance "+p.tolerance,points:Math.max(0,c.fail-p.tolerance)*9}
+ ];
+ return{score:clamp(18+factors.reduce((sum,f)=>sum+f.points,0)),factors}
+}
+function classify(s){return s<30?["LOW RISK","Access allowed","Sign-in is consistent with this user's profile.","tag","Allowed"]:s<60?["ELEVATED","Step-up verification","Some signals differ from the baseline. Request additional verification.","tag mid","Step-up"]:s<80?["HIGH RISK","Verify before access","Several signals are unusual. Challenge and rate-limit if appropriate.","tag high","Challenge"]:["CRITICAL","Temporarily restrict","Combined signals are highly unusual. Restrict this attempt and alert the user.","tag high","Restrict"]}
+function render(){
+ const {score,factors}=scoreModel(),d=classify(score);
+ $("score").textContent=score;$("metricRisk").innerHTML=score+' <span style="font-size:11px;color:#98a3a7">/ 100</span>';$("level").textContent=d[0].toLowerCase();
+ $("gauge").style.setProperty("--score",score+"%");$("fill").style.width=score+"%";$("badge").className=d[3];$("badge").textContent=d[0];$("decision").textContent=d[1];$("description").textContent=d[2];
+ $("factors").innerHTML=factors.map(f=>'<div class="factor"><div><div class="fname">'+f.name+'</div><div class="fdesc">'+f.desc+'</div></div><div class="points '+(f.points<0?'negative':'')+'">'+(f.points>0?'+':'')+f.points+'</div></div>').join("");
+ const top=[...factors].sort((a,b)=>Math.abs(b.points)-Math.abs(a.points))[0];
+ $("insight").innerHTML="<strong>Profile insight:</strong> "+(score<30?"Familiar context and personal tolerance keep this sign-in low risk.":top.name+" is the strongest contributor ("+(top.points>0?"+":"")+top.points+" points). Personal sensitivity changes its impact.");
+ $("events").innerHTML=events.slice(0,5).map(e=>'<tr><td><div class="event">'+e.name+'</div><div class="context">Demo event</div></td><td>'+e.context+'</td><td><span class="pill '+(e.risk>=60?'high':e.risk>=30?'mid':'')+'">'+e.risk+'</span></td><td>'+e.decision+'</td></tr>').join("");
+ $("eventcount").textContent=24+events.length-4;$("challengecount").textContent=challenge;$("confidence").innerHTML=(72+Math.min(events.length,12))+'<span style="font-size:11px;color:#98a3a7">%</span>';
+ $("chart").innerHTML=events.slice(0,8).reverse().map(e=>'<div class="bar" title="Risk '+e.risk+'"><span style="height:'+Math.max(5,e.risk)+'%"></span></div>').join("");
+}
+function outputs(){$("deviceout").textContent=$("device").value+"%";$("locationout").textContent=$("location").value+"%";$("timeout").textContent=$("time").value+"%";$("toleranceout").textContent=$("tolerance").value+" attempts";$("failureout").textContent=$("failures").value}
+["device","location","time","tolerance","failures","trusted","known","odd"].forEach(id=>$(id).addEventListener("input",()=>{outputs();render()}));
+function notify(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+$("save").onclick=()=>{profile={device:+$("device").value,location:+$("location").value,time:+$("time").value,tolerance:+$("tolerance").value};localStorage.setItem("passguard-profile",JSON.stringify(profile));notify("Personal profile saved in this browser");render()};
+$("evaluate").onclick=()=>{const s=scoreModel().score,d=classify(s);events.unshift({name:"Live sign-in evaluated",context:(inputs().device?"Recognised":"New")+" device · demo context",risk:s,decision:d[4]});events=events.slice(0,8);if(s>=30)challenge++;render();notify("Evaluation complete · "+d[0])};
+$("simulate").onclick=()=>{const sample=[{device:true,location:true,time:false,fail:0},{device:false,location:true,time:false,fail:1},{device:false,location:false,time:true,fail:3},{device:true,location:false,time:false,fail:5}][Math.floor(Math.random()*4)];$("trusted").checked=sample.device;$("known").checked=sample.location;$("odd").checked=sample.time;$("failures").value=sample.fail;outputs();const s=scoreModel().score,d=classify(s);events.unshift({name:"Synthetic sign-in",context:(sample.device?"Recognised":"New")+" device · "+(sample.location?"Familiar":"New")+" region",risk:s,decision:d[4]});events=events.slice(0,8);if(s>=30)challenge++;render();notify("Synthetic event added · risk "+s)};
+$("reset").onclick=()=>{profile={...base};["device","location","time","tolerance"].forEach((id,i)=>$(id).value=[70,60,45,2][i]);$("trusted").checked=true;$("known").checked=true;$("odd").checked=false;$("failures").value=0;events=events.slice(0,4);challenge=3;outputs();render();notify("Demo reset")};
+try{profile={...base,...JSON.parse(localStorage.getItem("passguard-profile")||"{}")}}catch(e){}
+["device","location","time","tolerance"].forEach((id,i)=>$(id).value=[profile.device,profile.location,profile.time,profile.tolerance][i]);outputs();render();
+</script>
+</body></html>
